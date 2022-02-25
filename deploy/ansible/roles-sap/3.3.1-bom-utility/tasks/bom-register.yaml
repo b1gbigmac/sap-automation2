@@ -63,7 +63,7 @@
         bom_file:                      "{{ download_directory }}/bom/{{ bom_name }}.yaml"
 
   when:
-    - result is succeeded or result is skipped
+    - result.status_code==200
 
 # -------------------------------------+---------------------------------------8
 
@@ -113,7 +113,7 @@
 
       when:                            not microsoft_supplied_bom.stat.exists
 
-  when:                                result is failed
+  when:                                result.status_code!=200
 
 # If Microsoft supplied BOM not found
 
