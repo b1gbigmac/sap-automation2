@@ -23,11 +23,14 @@
   when:                                distribution_id in ['suse15', 'redhat8']
 
 - name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
+
+- name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.get_url:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
     dest:                              "{{ download_directory }}/bom/{{ bom_name }}.yaml"
     mode:                              0644
-  register:                            stg_blob_exists
+  register:                            result
+
   vars:
     ansible_python_interpreter:        "{{ python_version }}"
   when:                                distribution_id in ['suse15', 'redhat8']
@@ -37,7 +40,7 @@
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
     dest:                              "{{ download_directory }}/bom/{{ bom_name }}.yaml"
     mode:                              0644
-  register:                            stg_blob_exists
+  register:                            result
   when:
     - distribution_id != 'suse15'
     - distribution_id != 'redhat8'
@@ -45,7 +48,7 @@
 - name:                                "BOM: Show blob status"
   ansible.builtin.debug:
     msg:
-      - "{{ stg_blob_exists }}"
+      - "{{ result }}"
       - "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
 
 - name:                                "BOM: Download BOM ({{ bom_name }}) from Storage Account"
@@ -62,8 +65,7 @@
         bom_file:                      "{{ download_directory }}/bom/{{ bom_name }}.yaml"
 
   when:
-    - stg_blob_exists is defined
-    - stg_blob_exists.status == 200
+    - result is succeed 
 
 # -------------------------------------+---------------------------------------8
 
@@ -113,7 +115,7 @@
 
       when:                            not microsoft_supplied_bom.stat.exists
 
-  when:                                blob_exists.status != 200
+  when:                                result is failed
 
 # If Microsoft supplied BOM not found
 
