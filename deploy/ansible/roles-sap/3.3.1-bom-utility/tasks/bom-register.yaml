@@ -39,7 +39,7 @@
     dest:                              "{{ download_directory }}/bom/{{ bom_name }}.yaml"
     mode:                              0644
   register:                            result
-  succeeded_when:                      result.status_code == 200
+  ignore_errors:                       true
   when:
     - distribution_id != 'suse15'
     - distribution_id != 'redhat8'
