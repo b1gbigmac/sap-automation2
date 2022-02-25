@@ -49,6 +49,7 @@
             path:                      "/saptmp"
             state:                     directory
             group:                     sapsys
+            mode:                      0755
 
   # Mount Filesystem on AFS
   # This is needed so that we can create the correct directory
@@ -109,6 +110,7 @@
             path:                      "/saptrans"
             state:                     directory
             group:                     sapsys
+            mode:                      0755
 
 # Mount Filesystem on AFS
 # This is needed so that we can create the correct directory

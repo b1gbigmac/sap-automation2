@@ -97,7 +97,7 @@
     verbosity:                         2
   loop:       "{{ bom.materials.media|flatten(levels=1) }}"
   when:
-    - item.download is undefined or item.download != false
+    - item.download is undefined or not item.download
 # ------------------</DEBUGGING>------------------
 
 - name:                                "3.3 BoM Processing: - Set Python version {{ distribution_id }}"
@@ -141,7 +141,7 @@
   vars:
     ansible_python_interpreter:        "{{ python_version }}"
   when:
-    - item.download is undefined or item.download != false
+    - item.download is undefined or not item.download
     - "distribution_id == 'suse15' or distribution_id == 'redhat8'"
 
 - name:                                "3.3 BoM Processing: - Download Files {{ distribution_id }}"
@@ -160,7 +160,7 @@
   delay:                               5
   loop:                                "{{ bom.materials.media|flatten(levels=1) }}"
   when:
-    - item.download is undefined or item.download != false
+    - item.download is undefined or not item.download
     - distribution_id != 'suse15'
     - distribution_id != 'redhat8'
 
