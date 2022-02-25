@@ -46,14 +46,13 @@ materials:
       path:         download_basket
       url:          https://softwaredownloads.sap.com/file/0020000000816512021
 
-    - name:        "Oracle installation dump"
-      archive:     51050829_3.ZIP
-      checksum:    06c3a3cd5d1ad266f61ca202552468501d94cfdc7641ffdadf0a9abad82b648a
-      extract:     true
-      download:    true
-      extractDir:  EXPORT
-      path:        download_basket
-      url:         https://softwaredownloads.sap.com/file/0030000000635092016
+    - name:         "NW 7.5 Installation Export"
+      archive:      51050829_3.ZIP
+      checksum:     06c3a3cd5d1ad266f61ca202552468501d94cfdc7641ffdadf0a9abad82b648a
+      extractDir:   EXPORT
+      extract:      true
+      path:         download_basket
+      url:          https://softwaredownloads.sap.com/file/0030000000635092016
 
     - name:         "SAP Host Agent"
       archive:      SAPHOSTAGENT53_53-80004822.SAR
