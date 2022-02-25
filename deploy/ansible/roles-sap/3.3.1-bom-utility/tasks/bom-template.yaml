@@ -37,7 +37,7 @@
     python_version:                    'python3'
   when:                                distribution_id in ['suse15', 'redhat8']
 
-- name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
+- name:                                "BOM2: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.uri:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
     return_content:                    false
@@ -46,7 +46,7 @@
     ansible_python_interpreter:        "{{ python_version }}"
   when:                                distribution_id in ['suse15', 'redhat8']
 
-- name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
+- name:                                "BOM2: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.uri:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
     return_content:                    false

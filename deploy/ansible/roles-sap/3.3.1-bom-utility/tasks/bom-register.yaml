@@ -25,7 +25,7 @@
 - name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.uri:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-    method:                            HEAD
+    return_content:                    false
   register:                            blob_exists
   vars:
     ansible_python_interpreter:        "{{ python_version }}"
@@ -33,8 +33,8 @@
 
 - name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.uri:
+    return_content:                    false
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-    method:                            HEAD
   register:                            blob_exists
   when:
     - distribution_id != 'suse15'
@@ -42,7 +42,9 @@
 
 - name:                                "BOM: Show blob status"
   ansible.builtin.debug:
-    var:                               blob_exists
+    msg:
+      - "{{ stg_blob_exists }}"
+      - "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
 
 - name:                                "BOM: Download BOM ({{ bom_name }}) from Storage Account"
   block:
