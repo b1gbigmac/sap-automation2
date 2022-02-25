@@ -43,11 +43,11 @@
     - distribution_id != 'suse15'
     - distribution_id != 'redhat8'
 
-# - name:                                "BOM: Show blob status"
-#   ansible.builtin.debug:
-#     msg:
-#       - "{{ result }}"
-#       - "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
+- name:                                "BOM: Show blob status"
+  ansible.builtin.debug:
+    msg:
+      - "{{ result }}"
+      - "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
 
 - name:                                "BOM: Download BOM ({{ bom_name }}) from Storage Account"
   block:
