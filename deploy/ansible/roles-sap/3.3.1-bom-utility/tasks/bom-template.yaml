@@ -115,7 +115,8 @@
             dest:                      /usr/sap/install/downloads/{{ sap_inifile }}
             mode:                      0644
             force:                     true
-      when:                            microsoft_supplied_bom_template_archive.stat.exists
+          when:                        microsoft_supplied_bom_template_archive.stat.exists
+      when:                            not microsoft_supplied_bom_template.stat.exists
 
   when:                                result is failed
 

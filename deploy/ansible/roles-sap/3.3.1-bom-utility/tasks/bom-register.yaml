@@ -55,7 +55,7 @@
 
     - name:                            "{{ task_prefix }} Register downloaded BOM ({{ bom_name }})"
       ansible.builtin.include_vars:
-        file:                          "{{ inventory_dir }}/{{ bom_name }}.yaml"
+        file:                          "{{ download_directory }}/bom/{{ bom_name }}.yaml"
         name:                          bom
 
     - name:                            "{{ task_prefix }} Register downloaded BOM ({{ bom_name }}) file name"
@@ -63,7 +63,7 @@
         bom_file:                      "{{ download_directory }}/bom/{{ bom_name }}.yaml"
 
   when:
-    - result is succeeded
+    - result is succeeded or result is skipped
 
 # -------------------------------------+---------------------------------------8
 
