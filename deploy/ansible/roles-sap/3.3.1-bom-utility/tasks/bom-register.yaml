@@ -26,7 +26,7 @@
   ansible.builtin.uri:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
     return_content:                    false
-  register:                            blob_exists
+  register:                            stg_blob_exists
   vars:
     ansible_python_interpreter:        "{{ python_version }}"
   when:                                distribution_id in ['suse15', 'redhat8']
@@ -35,7 +35,7 @@
   ansible.builtin.uri:
     return_content:                    false
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-  register:                            blob_exists
+  register:                            stg_blob_exists
   when:
     - distribution_id != 'suse15'
     - distribution_id != 'redhat8'
