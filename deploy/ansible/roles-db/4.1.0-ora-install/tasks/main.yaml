@@ -31,7 +31,7 @@
 # | Step 1 run the pre-installation check                                      |
 # +------------------------------------4--------------------------------------*/
 
-- name:                                "Execute RUNINSTALLER PreCheck"
+- name:                                "ORACLE: Execute RUNINSTALLER PreCheck"
   # become:                              true
   # become_user:                         "oracle"
   ansible.builtin.shell:              ./RUNINSTALLER -ohcheck -silent
@@ -49,18 +49,18 @@
     - skip_ansible_lint
 
 # Debug for testing
-- name:                                "Debug: installer prechecks output"
+- name:                                "ORACLE: Debug: installer prechecks output"
   ansible.builtin.debug:
     var:                               oraprecheck_results.stdout_lines
 
-- name:                                "Debug: installer prechecks output"
+- name:                                "ORACLE: Debug: installer prechecks output"
   ansible.builtin.copy:
     dest:                              /oracle/pre-req.log
     content:                           oraprecheck_results.stdout
     mode:                              0777
   when:                                oraprecheck_results.stdout is defined
 
-- name:                                Create oracle_pre_check_install.txt
+- name:                                "ORACLE: Create oracle_pre_check_install.txt"
   ansible.builtin.file:
     path:                              /oracle/oracle_pre_check_install.txt
     state:                             touch
@@ -74,7 +74,7 @@
 # | Step 2 run the installation check                                          |
 # +------------------------------------4--------------------------------------*/
 
-- name:                                "Execute RUNINSTALLER"
+- name:                                "ORACLE: Execute RUNINSTALLER"
   # become:                              true
   # become_user:                         "oracle"
   ansible.builtin.shell:               ./RUNINSTALLER -silent
@@ -90,18 +90,18 @@
   tags:
     - skip_ansible_lint
 
-- name:                                "Debug: installer output"
+- name:                                "ORACLE: Debug: installer output"
   ansible.builtin.debug:
     var:                               orainstaller_results.stdout_lines
 
-- name:                                "Debug: installer prechecks output"
+- name:                                "ORACLE: Debug installer output"
   ansible.builtin.copy:
     dest:                              /oracle/install.log
     content:                           orainstaller_results.stdout
     mode:                              0777
   when:                                orainstaller_results.stdout is defined
 
-- name:                                Create oracleinstall.txt
+- name:                                "ORACLE: Create oracleinstall.txt"
   ansible.builtin.file:
     path:                              /oracle/oracleinstall.txt
     state:                             touch
@@ -115,7 +115,7 @@
 # | Step 3 Post processing                                                     |
 # +------------------------------------4--------------------------------------*/
 
-- name:                                "Oracle Post Processing - Run orainstRoot.sh"
+- name:                                "ORACLE: Post Processing - Run orainstRoot.sh"
   become:                              true
   become_user:                         root
   ansible.builtin.shell:               /oracle/oraInventory/orainstRoot.sh
@@ -126,13 +126,13 @@
   tags:
     - skip_ansible_lint
 
-- name:                                Create orainstRoot_executed.txt
+- name:                                "ORACLE: Create orainstRoot_executed.txt"
   ansible.builtin.file:
     path:                              /oracle/orainstRoot_executed.txt
     state:                             touch
     mode:                              0755
 
-- name:                                "Oracle Post Processing - Run root.sh"
+- name:                                "ORACLE:  Post Processing - Run root.sh"
   become:                              true
   become_user:                         root
   ansible.builtin.shell  :             /oracle/{{ db_sid }}/{{ ora_version }}/root.sh
@@ -143,13 +143,13 @@
   tags:
     - skip_ansible_lint
 
-- name:                                Create rootscripts_executed.txt
+- name:                                "ORACLE: Create rootscripts_executed.txt"
   ansible.builtin.file:
     path:                              /oracle/rootscripts_executed.txt
     state:                             touch
     mode:                              0755
 
-- name:                                Permissions
+- name:                                "ORACLE: Permissions"
   ansible.builtin.file:
     path:                              /oracle/{{ db_sid|upper }}/{{ ora_version }}/bin/oracle
     state:                             file
@@ -163,7 +163,7 @@
 # | Step 4 SBP Patching for Oracle                                             |
 # +------------------------------------4--------------------------------------*/
 
-- name:                                Find MOPatch
+- name:                                "ORACLE: Find MOPatch"
   ansible.builtin.find:
     paths:                             /usr/sap/install/SBP/SAPSBP
     patterns:                          ["MOPatch"]
@@ -171,22 +171,22 @@
     recurse:                           true
   register:                            mopatch_directory
 
-- name:                                "Debug: Find MOPatch"
+- name:                                "ORACLE: Find MOPatch"
   ansible.builtin.fail:
     msg:                               "Too many MOPatches found"
   when:                                mopatch_directory.matched != 1
 
-- name:                                "MOPatch path"
+- name:                                "ORACLE: MOPatch path"
   ansible.builtin.set_fact:
     mopatch_path:                      "{{ mopatch_directory.files[0].path }}"
   when:                                mopatch_directory.matched == 1
 
-- name:                                Check if "OPatch.bck" exists
+- name:                                "ORACLE: Check if 'OPatch.bck' exists"
   ansible.builtin.stat:
     path:                              /oracle/{{ db_sid | upper }}/{{ ora_version }}/OPatch.bck
   register:                            opatch_stat
 
-- name:                                backup OPatch
+- name:                                "ORACLE: backup OPatch"
   ansible.builtin.copy:
     src:                               /oracle/{{ db_sid | upper }}/{{ ora_version }}/OPatch
     dest:                              /oracle/{{ db_sid | upper }}/{{ ora_version }}/OPatch.bck
@@ -195,14 +195,14 @@
   when:
     - not opatch_stat.stat.exists
 
-- name:                                remove old OPatch
+- name:                                "ORACLE: remove old OPatch"
   ansible.builtin.file:
     path:                              /oracle/{{ db_sid | upper }}/{{ ora_version }}/OPatch
     state:                             absent
   when:
     - not opatch_stat.stat.exists
 
-- name:                                copy OPatch
+- name:                                "ORACLE: copy OPatch"
   become:                              true
   become_user:                         "oracle"
   ansible.builtin.copy:
@@ -211,7 +211,7 @@
     remote_src:                        true
     mode:                              0777
 
-- name:                                copy MOPatch
+- name:                                "ORACLE: copy MOPatch"
   become:                              true
   become_user:                         "oracle"
   ansible.builtin.copy:
@@ -221,7 +221,7 @@
     mode:                              0777
 
 
-- name:                                "Oracle Post Processing - SBP Patching"
+- name:                                "ORACLE: Post Processing - SBP Patching"
   become:                              true
   become_user:                         "oracle"
   ansible.builtin.shell:               $IHRDBMS/MOPatch/mopatch.sh -v -s /usr/sap/install/SBP/{{ oracle_sbp_patch }}
@@ -238,7 +238,7 @@
     chdir:                             /usr/sap/install/SBP/
     executable:                        /bin/csh
 
-- name:                                "Post processing installer output"
+- name:                                "ORACLE: Post processing installer output"
   ansible.builtin.debug:
     var:                               sbpscript_results.stdout_lines
 
@@ -247,7 +247,7 @@
 #     path:                              "{{ mopatch_path }}"
 #     state:                             absent
 
-- name:                                Create sbpinstalled.txt
+- name:                                "ORACLE: Create sbpinstalled.txt"
   ansible.builtin.file:
     path:                              /oracle/sbpinstalled.txt
     state:                             touch
