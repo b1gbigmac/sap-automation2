@@ -75,9 +75,9 @@
         dest:                          /usr/sap/install/downloads/{{ sap_inifile }}
         mode:                          0644
         force:                         true
-      when:                            result is succeeded
+      
   when:                                
-    - result is succeeded
+    - result is succeeded or result is skipped
 
 # -------------------------------------+---------------------------------------8
 #
