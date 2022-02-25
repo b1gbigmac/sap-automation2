@@ -131,7 +131,7 @@
                                        {% if item.filename is undefined %}{{ item.archive }}{% else %}{{ item.filename }}{% endif %}"
     mode:                              "{% if item.permissions is undefined %}0644{% else %}{{ item.permissions }}{% endif %}"
     tmp_dest:                          "{{ target_media_location }}/tmp"
-    checksum:                          "sha256:{{ item.checksum | upper }}"
+    checksum:                          "{% if item.checksum is defined %}sha256:{{ item.checksum | upper }}{% else %}{% endif %}"
     validate_certs:                    true
   register:                            result
   until:                               result is succeeded
