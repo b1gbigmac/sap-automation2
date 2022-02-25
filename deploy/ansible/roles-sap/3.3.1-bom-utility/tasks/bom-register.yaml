@@ -25,7 +25,7 @@
 - name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.get_url:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-    dest:                              "{{ inventory_dir }}/{{ bom_name }}.yaml"
+    dest:                              "{{ download_directory }}/bom/{{ bom_name }}.yaml"
     mode:                              0644
   register:                            stg_blob_exists
   vars:
@@ -35,7 +35,7 @@
 - name:                                "BOM: {{ bom_name }} Check is file {{ bom_name }} is already downloaded to the storage account"
   ansible.builtin.get_url:
     url:                               "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-    dest:                              "{{ inventory_dir }}/{{ bom_name }}.yaml"
+    dest:                              "{{ download_directory }}/bom/{{ bom_name }}.yaml"
     mode:                              0644
   register:                            stg_blob_exists
   when:
@@ -50,35 +50,6 @@
 
 - name:                                "BOM: Download BOM ({{ bom_name }}) from Storage Account"
   block:
-    - name:                            "{{ task_prefix }} Download BOM ({{ bom_name }}) from Storage Account"
-      ansible.builtin.get_url:
-        url:                           "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-        dest:                          "{{ inventory_dir }}/{{ bom_name }}.yaml"
-        mode:                          0644
-      register:                        result
-      until:                           result is succeeded
-      retries:                         2
-      delay:                           10
-      delegate_to:                     localhost                                               # Causes action to occur on the Ansible Controller
-      become:                          true
-      vars:
-        ansible_python_interpreter:        "{{ python_version }}"
-      when:                            distribution_id in ['suse15', 'redhat8']
-
-    - name:                            "{{ task_prefix }} Download BOM ({{ bom_name }}) from Storage Account"
-      ansible.builtin.get_url:
-        url:                           "{{ sapbits_location_base_path }}/{{ sapbits_bom_files }}/boms/{{ bom_name }}/{{ bom_name }}.yaml{{ sapbits_sas_token }}"
-        dest:                          "{{ inventory_dir }}/{{ bom_name }}.yaml"
-        mode:                          0644
-      register:                        result
-      until:                           result is succeeded
-      retries:                         2
-      delay:                           10
-      delegate_to:                     localhost                                               # Causes action to occur on the Ansible Controller
-      become:                          true
-      when:
-        - distribution_id != 'suse15'
-        - distribution_id != 'redhat8'
 
     - name:                            "{{ task_prefix }} Register downloaded BOM ({{ bom_name }})"
       ansible.builtin.include_vars:
@@ -88,11 +59,11 @@
 
     - name:                            "{{ task_prefix }} Register downloaded BOM ({{ bom_name }}) file name"
       ansible.builtin.set_fact:
-        bom_file:                      "{{ inventory_dir }}/{{ bom_name }}.yaml"
+        bom_file:                      "{{ download_directory }}/bom/{{ bom_name }}.yaml"
 
   when:
-    - blob_exists is defined
-    - blob_exists.status != 404
+    - stg_blob_exists is defined
+    - stg_blob_exists.status == 200
 
 # -------------------------------------+---------------------------------------8
 
@@ -142,7 +113,7 @@
 
       when:                            not microsoft_supplied_bom.stat.exists
 
-  when:                                blob_exists.status == 404
+  when:                                blob_exists.status != 200
 
 # If Microsoft supplied BOM not found
 
