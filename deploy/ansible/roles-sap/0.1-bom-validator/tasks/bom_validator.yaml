@@ -73,7 +73,7 @@
 
 - name:                                "0.1 BoM Validator: - BOM: {{ bom_name }} Folder"
   ansible.builtin.debug:
-    msg:                               "FOLDERNAME : {{ playbook_dir }}/{{ bom_file.rpartition('/')[0] }}"
+    msg:                               "FOLDERNAME : {{ bom_file.rpartition('/')[0] }}"
 
 - name:                                "0.1 BoM Validator: - BOM: {{ bom_name }} Upload Folder"
   vars:
