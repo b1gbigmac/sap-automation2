@@ -43,7 +43,6 @@ materials:
       archive:      SAP19P_2202-70004508.ZIP
       checksum:     4a231da93010f1d700d89cde8c05f5be8c50fc85ce3843156123765271274815
       extract:      true
-      download:     true
       extractDir:   SBP/SAPSBP
       path:         SBP
       #creates:     SIGNATURE.SMF
@@ -53,7 +52,6 @@ materials:
       archive:      SBPJDK19P_2202-70004508.ZIP
       checksum:     e411cddd92e21ed21348ea0da146fa08bbfe9a39b1c955fff532df785bd666b6
       extract:      false
-      download:     true
       extractDir:   SBP/SBPJDK
       path:         SBP
       #creates:     SIGNATURE.SMF
@@ -63,7 +61,6 @@ materials:
       archive:      OPATCH19P_2202-70004508.ZIP
       checksum:     b1860114866acf5bcd9497804ec84957f74abadca730ebc54d7f324c5b656b53
       extract:      true
-      download:     true
       extractDir:   SBP/OPATCH
       path:         SBP
       #creates:     SIGNATURE.SMF
@@ -73,25 +70,21 @@ materials:
     - name:         "Oracle compact-lib"
       archive:      compat-libcap1-1.10-7.el7.x86_64.rpm
       extract:      false
-      download:     true
       url:          https://public-yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/compat-libcap1-1.10-7.el7.x86_64.rpm
 
     - name:         "Oracle ASMSUPPORT RPM"
       archive:      oracleasm-support-2.1.12-1.el8.x86_64.rpm
       extract:      false
-      download:     true
       url:          https://public-yum.oracle.com/repo/OracleLinux/OL8/addons/x86_64/getPackage/oracleasm-support-2.1.12-1.el8.x86_64.rpm
 
     - name:         "Oracle ASMLIB RPM"
       archive:      oracleasmlib-2.0.17-1.el8.x86_64.rpm
       extract:      false
-      download:     true
       url:          https://download.oracle.com/otn_software/asmlib/oracleasmlib-2.0.17-1.el8.x86_64.rpm
 
     - name:         "Oracle compact-lib"
       archive:      compat-libcap1-1.10-7.el7.x86_64.rpm
       extract:      false
-      download:     true
       url:          https://public-yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/compat-libcap1-1.10-7.el7.x86_64.rpm
 
 ...
