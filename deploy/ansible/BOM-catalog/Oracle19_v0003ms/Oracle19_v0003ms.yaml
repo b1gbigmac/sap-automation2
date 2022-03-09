@@ -8,7 +8,7 @@ materials:
   media:
     - name:         Oracle Client
       archive:      51055071.zip
-      checksum:     80009b7b25e9d307c0bb9f9996b1444d7aafd38c0783fe3d91138829ebc67b7b
+      checksum:     d63ba8bf707f96782101d66cbde9677a8bc11b9cfcfc6bbd167b6728c0243806
       extract:      true
       extractDir:   oraclient
       path:         download_basket
