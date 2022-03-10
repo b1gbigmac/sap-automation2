@@ -47,6 +47,10 @@ management_subnet_address_prefix="10.10.20.64/28"
 # management_firewall_subnet_address_prefix is a mandatory parameter if the subnets are not defined in the workload or if existing subnets are not used
 management_firewall_subnet_address_prefix="10.10.20.0/26"
 
+
+# bastion_subnet_arm_id _arm_id is an optional parameter that if provided specifies Azure resource identifier for the existing subnet to use
+#bastion_subnet_arm_id=""
+
 # bastion_subnet_address_prefix is a mandatory parameter if bastion is deployed and if the subnets are not defined in the workload or if existing subnets are not used
 bastion_subnet_address_prefix="10.10.20.128/26"
 
