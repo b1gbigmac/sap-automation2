@@ -16,10 +16,10 @@ locals {
         arm_id        = try(coalesce(var.management_network_arm_id, try(var.infrastructure.vnets.management.arm_id, "")), "")
         address_space = try(coalesce(var.management_network_address_space, try(var.infrastructure.vnets.management.address_space, "")), "")
 
-        subnet_management = {
-          name   = try(coalesce(var.management_subnet_name, try(var.infrastructure.vnets.management.subnet_management.name, "")), "")
-          arm_id = try(coalesce(var.management_subnet_arm_id, try(var.infrastructure.vnets.management.subnet_management.arm_id, "")), "")
-          prefix = try(coalesce(var.management_subnet_address_prefix, try(var.infrastructure.vnets.management.subnet_management.prefix, "")), "")
+        subnet_mgmt = {
+          name   = try(coalesce(var.management_subnet_name, try(var.infrastructure.vnets.management.subnet_mgmt.name, "")), "")
+          arm_id = try(coalesce(var.management_subnet_arm_id, try(var.infrastructure.vnets.management.subnet_mgmt.arm_id, "")), "")
+          prefix = try(coalesce(var.management_subnet_address_prefix, try(var.infrastructure.vnets.management.subnet_mgmt.prefix, "")), "")
           nsg = {
             name        = try(coalesce(var.management_subnet_nsg_name, try(var.infrastructure.vnets.management.nsg_mgmt.name, "")), "")
             arm_id      = try(coalesce(var.management_subnet_nsg_arm_id, try(var.infrastructure.vnets.management.nsg_mgmt.arm_id, "")), "")

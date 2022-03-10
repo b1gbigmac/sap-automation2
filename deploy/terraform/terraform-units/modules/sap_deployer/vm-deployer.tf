@@ -27,7 +27,7 @@ resource "azurerm_network_interface" "deployer" {
 
   ip_configuration {
     name      = "ipconfig1"
-    subnet_id = local.management_subnet_exists ? data.azurerm_subnet.subnet_management[0].id : azurerm_subnet.subnet_management[0].id
+    subnet_id = local.management_subnet_exists ? data.azurerm_subnet.subnet_mgmt[0].id : azurerm_subnet.subnet_mgmt[0].id
     private_ip_address = var.deployer.use_DHCP ? (
       "") : (
       length(var.deployer.private_ip_address) > 0 ? (

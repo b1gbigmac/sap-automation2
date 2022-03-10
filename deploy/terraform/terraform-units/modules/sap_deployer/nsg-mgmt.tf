@@ -27,7 +27,7 @@ resource "azurerm_subnet_network_security_group_association" "associate_nsg_mgmt
 
   ]
   count                     = (!local.management_subnet_exists) ? 1 : 0
-  subnet_id                 = local.management_subnet_exists ? data.azurerm_subnet.subnet_management[0].id : azurerm_subnet.subnet_management[0].id
+  subnet_id                 = local.management_subnet_exists ? data.azurerm_subnet.subnet_mgmt[0].id : azurerm_subnet.subnet_mgmt[0].id
   network_security_group_id = local.management_subnet_nsg_exists ? data.azurerm_network_security_group.nsg_mgmt[0].id : azurerm_network_security_group.nsg_mgmt[0].id
 }
 
