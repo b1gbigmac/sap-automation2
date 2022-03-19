@@ -38,7 +38,7 @@
         - 0.1-passwords
 
     - name:                            "DBLoad Playbook: - Read storage account details"
-      include_role:
+      ansible.builtin.include_role:
         name:                          roles-misc/0.3.sap-installation-media-storage-details
         public:                        true
       tags:
@@ -70,7 +70,7 @@
 #
 # -------------------------------------+---------------------------------------8
     - name:                            "DBLoad Playbook: - Load the SAP parameters"
-      include_vars:                    "{{ _workspace_directory }}/sap-parameters.yaml"
+      ansible.builtin.include_vars:    "{{ _workspace_directory }}/sap-parameters.yaml"
 
     - name:                            "DBLoad Playbook: - Perform DB Load on HANA"
       block:
@@ -102,6 +102,8 @@
                 path:                  "{{ _workspace_directory }}/.progress/db-load-done"
                 state:                 touch
                 mode:                  0755
+              when:
+                - dbload_already_performed is defined or (dbload.rc is defined and dbload.rc == 0)
 
           always:
 
@@ -141,7 +143,7 @@
 # |                                                                            |
 # +------------------------------------4--------------------------------------*/
 
-- hosts:                               "{{ sap_sid|upper }}_DB"
+- hosts:                               "{{ sap_sid|upper }}_DB[0]"
 
   name:                                DB Installation - ORACLE
   remote_user:                         "{{ orchestration_ansible_user }}"
@@ -171,15 +173,18 @@
         - name:                        "DBLoad Playbook: - Run DBLoad"
           ansible.builtin.include_role:
             name:                      roles-sap/5.1-dbload
-
         - name:                        "DBLoad Playbook: - Create db-load-done flag"
           delegate_to:                 localhost
           ansible.builtin.file:
             path:                      "{{ _workspace_directory }}/.progress/db-load-done"
             state:                     touch
             mode:                      0755
+          when:
+            - dbload.rc is defined
+            - dbload.rc == 0
 
       when:                            platform == 'ORACLE'
+
 ...
 # /*----------------------------------------------------------------------------8
 # |                                    END                                      |

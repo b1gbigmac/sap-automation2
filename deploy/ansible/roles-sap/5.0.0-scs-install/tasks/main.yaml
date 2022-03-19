@@ -129,22 +129,46 @@
         msg:                           "SCS Installation succeeded"
       when:                            scs_installation.rc == 0
 
+    - name:                            Find the installationSuccesfullyFinished.dat (SAPINST)
+      ansible.builtin.find:
+        paths:                         "{{ target_media_location }}/sapinst_instdir/{{ bom.product_ids.scs.replace('.','/').replace('/ABAP','').split(':')[1] }}/INSTALL/DISTRIBUTED/ABAP/ASCS"
+        file_type:                     file
+        patterns:                      'installationSuccesfullyFinished.dat'
+        recurse:                       true
+      register:                        scs_installed_according_to_sapinst
+
+    - name:                            "SCS Install: show"
+      ansible.builtin.debug:
+        var:                           scs_installed_according_to_sapinst
+
     - name:                            "SCS Install: flag"
       ansible.builtin.file:
         path:                          /etc/sap_deployment_automation/sap_deployment_scs.txt
         state:                         touch
         mode:                          0755
+      when:
+        - scs_installation.rc == 0
+        - scs_installed_according_to_sapinst is defined
+        - scs_installed_according_to_sapinst | length > 0
+
 
   when:
     - "'scs' in supported_tiers"
     - not scs_installed.stat.exists
 
+
 - name:                                "SCS Install status"
-  ansible.builtin.debug:
-    msg:                               "SCS is already installed"
+  block:
+    
+    - name:                            "SCS Install status"
+      ansible.builtin.debug:
+        msg:                           "SCS is already installed"
+    
+    - name:                            "SCS: - return value"
+      ansible.builtin.set_fact:
+        scs_already_installed:         true     
   when:
-    - "'scs' in supported_tiers"
-    -  scs_installed.stat.exists
+    - scs_installed.stat.exists
 
 ...
 # /*---------------------------------------------------------------------------8
